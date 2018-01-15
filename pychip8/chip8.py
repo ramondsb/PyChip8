@@ -9,23 +9,37 @@ class Chip8:
 
 
     def cycle(self):
-        # Read opcode
-          opcode =  self.memory.read_next_opcode(self.pc)
-        # Find operation to execute
-          self.decode(opcode)
+        opcode =  self.memory.read_opcode(self.pc)
+        self.decode(opcode)
+        self.pc += 2
+
 
 
     def decode(self, opcode):
-        if (opcode &  int.from_bytes(b'\xF0\x00', byteorder='big')) == 0x1000:
-            print("1")
-        elif opcode & int.from_bytes(b'\xF0\x00', byteorder='big') == 0x2000:
-            print("2")
-        else:
-            print("other")
+        # First group of instruction with forma x000
+        g1 = {
+                0x1000: self.sys_address,
+                0x2000: self.sys_address2
+        }
+        op = (opcode & int.from_bytes(b'\xF0\x00', byteorder='big'))
+
+        g1[op](opcode)
+
+
+    def load_rom(self, bytes):
+        self.memory.set_data(bytes)
+
+    def sys_address(self, opcode):
+        print("sys_address")
+
+
+    def sys_address2(self, opcode):
+        print("sys_address2")
 
 
     def run(self):
         self.running = True
+        self.cycle()
         self.cycle()
 
 

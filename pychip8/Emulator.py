@@ -15,6 +15,7 @@ class Emulator:
 
 
     def run(self):
+        self.chip8.load_rom(b'\x10\x00\x2B\xFF')
         self.chip8.run()
         #while(self.chip8.is_running()):
           # chip8.display_state()

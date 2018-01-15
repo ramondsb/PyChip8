@@ -20,10 +20,10 @@ class TestMemory(unittest.TestCase):
         mem.set_data(dump_data)
 
         opcode = int.from_bytes(dump_data[0:2], byteorder='big')
-        self.assertEqual(opcode, mem.read_next_opcode(0))
+        self.assertEqual(opcode, mem.read_opcode(0))
 
         opcode = int.from_bytes(dump_data[2:], byteorder='big')
-        self.assertEqual(opcode, mem.read_next_opcode(2))
+        self.assertEqual(opcode, mem.read_opcode(2))
 
 
 if __name__ == '__main__':
