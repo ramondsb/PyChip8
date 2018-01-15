@@ -11,6 +11,10 @@ class Memory:
         pass
 
 
+    def set_data(self, bytes):
+        self.mem = bytearray(bytes)
+
+
     def read_address(self, address):
         pass
 
