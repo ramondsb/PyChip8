@@ -104,7 +104,7 @@ class Chip8:
     def opcode_0x4XNN(self, opcode):
         print("Executing opcode 4XNN")
         """Skips the next instruction if VX doesn't equal NN"""
-        x = opcode & 0x0F00
+        x = (opcode & 0x0F00) >> 8
         nn = opcode & 0x00FF
 
         vx = self.registers[x]
