@@ -53,6 +53,7 @@ class Chip8:
                 0x1000: self.opcode_0x1NNN,
                 0x2000: self.opcode_0x2NNN,
                 0x3000: self.opcode_0x3XNN,
+                0x4000: self.opcode_0x4XNN,
                 0xa000: self.opcode_0xAXXX,
                 0x0000: opcode_0x00XX
         }
@@ -97,6 +98,16 @@ class Chip8:
 
         vx = self.registers[x]
         if vx == nn:
+            self.pc += 2
+
+    def opcode_0x4XNN(self, opcode):
+        print("Executing opcode 4XNN")
+        """Skips the next instruction if VX doesn't equal NN"""
+        x = opcode & 0x0F00
+        nn = opcode & 0x00FF
+
+        vx = self.registers[x]
+        if vx != nn:
             self.pc += 2
 
 
