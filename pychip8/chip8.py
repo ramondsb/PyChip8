@@ -55,6 +55,7 @@ class Chip8:
                 0x3000: self.opcode_0x3XNN,
                 0x4000: self.opcode_0x4XNN,
                 0x5000: self.opcode_0x5XY0,
+                0x6000: self.opcode_0x6XNN,
                 0xa000: self.opcode_0xAXXX,
                 0x0000: opcode_0x00XX
         }
@@ -123,6 +124,17 @@ class Chip8:
         vy = self.registers[y]
         if vx == vy:
             self.pc += 2
+
+
+    def opcode_0x6XNN(self, opcode):
+        print("Executing opcode 6XNN")
+        """Sets VX to NN"""
+        x = (opcode & 0x0F00) >> 8
+        nn = opcode & 0x00FF
+
+        self.registers[x] = nn
+        self.pc += 2
+
 
     def sys_address2(self, opcode):
         print("sys_address2")
