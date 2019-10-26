@@ -60,8 +60,9 @@ class Chip8:
 
 
     def load_rom(self, bytes):
+        bytes = list(bytes)
         for i in range(len(bytes)):
-            self.memory[i + 512] = int(bytes[i], 16)
+            self.memory[i + 512] = bytes[i]
 
 
     def run(self):
