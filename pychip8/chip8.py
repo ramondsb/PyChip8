@@ -3,6 +3,8 @@ class Chip8:
     def __init__(self):
         self.memory = 4096 * [int("0x00", 16)]
         self.pc = int("0x200", 16)
+        self.stack = 16 * [int("0x00", 16)]
+        self.sp = 0
         self.i = int("0x00", 16)
         self.registers = 16 * [int("0x00", 16)]
         self.delay_timer = int("0x00", 16)
@@ -37,6 +39,7 @@ class Chip8:
 
     def decode_opcode(self, opcode):
         opcode = opcode & 0xffff
+        print("opcode", hex(opcode))
 
         def opcode_0x00XX(opcode):
             g2 = {
@@ -47,8 +50,9 @@ class Chip8:
             g2[op](opcode)
 
         g1 = {
-                0x1000: self.sys_address,
-                0x2000: self.sys_address2,
+                0x1000: self.opcode_0x1NNN,
+                0x2000: self.opcode_0x2NNN,
+                0x3000: self.opcode_0x3XNN,
                 0xa000: self.opcode_0xAXXX,
                 0x0000: opcode_0x00XX
         }
@@ -67,11 +71,33 @@ class Chip8:
 
     def run(self):
         self.cycle()
-        self.cycle()
 
-    def sys_address(self, opcode):
-        print("sys_address")
-        self.pc += 2
+
+    def opcode_0x1NNN(self, opcode):
+        print("Executing opcode 1NNN")
+        """Jumps to address NNN"""
+        address = opcode & 0x0FFF
+        self.pc = address
+
+
+    def opcode_0x2NNN(self, opcode):
+        print("Executing opcode 2NNN")
+        """Calls subroutine at NNN"""
+        address = opcode & 0x0FFF
+        self.stack[self.sp] = self.pc
+        self.sp += 1
+        self.pc = address
+
+
+    def opcode_0x3XNN(self, opcode):
+        print("Executing opcode 3XNN")
+        """Skips the next instruction if VX equals NN"""
+        x = opcode & 0x0F00
+        nn = opcode & 0x00FF
+
+        vx = self.registers[x]
+        if vx == nn:
+            self.pc += 2
 
 
     def sys_address2(self, opcode):
@@ -80,14 +106,15 @@ class Chip8:
 
     def opcode_00E0(self, opcode):
         """Clear screen"""
+        print("clear screen")
         self.display = 64 * [32 * [int("0x00", 16)]]
         self.pc += 2
         # TODO: Set draw flag
 
 
     def opcode_0xAXXX(self, opcode):
+        print("Executing opcode AXXX")
         address = opcode & 0x0FFF
-        print("address: {}".format(hex(address)))
         self.i = address 
         self.pc += 2
 
