@@ -49,6 +49,14 @@ class Chip8:
             op = (opcode & int('0x00FF', 16))
             g2[op](opcode)
 
+        def opcode_0x8NNN(opcode):
+            g = {
+                0x0000: self.opcode_0x8XY0,
+                0x0001: self.opcode_0x8XY1,
+            }
+            op = (opcode & int('0x000F', 16))
+            g[op](opcode)
+
         g1 = {
                 0x1000: self.opcode_0x1NNN,
                 0x2000: self.opcode_0x2NNN,
@@ -57,7 +65,7 @@ class Chip8:
                 0x5000: self.opcode_0x5XY0,
                 0x6000: self.opcode_0x6XNN,
                 0x7000: self.opcode_0x7XNN,
-                0x8000: self.opcode_0x8XY0,
+                0x8000: opcode_0x8NNN,
                 0xa000: self.opcode_0xAXXX,
                 0x0000: opcode_0x00XX
         }
@@ -166,6 +174,19 @@ class Chip8:
 
         vy = self.registers[y]
         self.registers[x] = vy
+        self.pc += 2
+
+    def opcode_0x8XY1(self, opcode):
+        print("Executing opcode 8XY1")
+        """Sets VX to VX or VY"""
+        x = (opcode & 0x0F00) >> 8
+        y = (opcode & 0x00F0) >> 4
+
+        print("x: {}, y: {}".format(hex(x), hex(y)))
+
+        vx = self.registers[x]
+        vy = self.registers[y]
+        self.registers[x] = vx | vy
         self.pc += 2
 
 
