@@ -55,6 +55,7 @@ class Chip8:
                 0x0001: self.opcode_0x8XY1,
                 0x0002: self.opcode_0x8XY2,
                 0x0003: self.opcode_0x8XY3,
+                0x0004: self.opcode_0x8XY4,
             }
             op = (opcode & int('0x000F', 16))
             g[op](opcode)
@@ -218,6 +219,28 @@ class Chip8:
         vx = self.registers[x]
         vy = self.registers[y]
         self.registers[x] = vx ^ vy
+        self.pc += 2
+
+
+    def opcode_0x8XY4(self, opcode):
+        print("Executing opcode 8XY4")
+        """Adds VY to VX and set carry flag"""
+        x = (opcode & 0x0F00) >> 8
+        y = (opcode & 0x00F0) >> 4
+
+        print("x: {}, y: {}".format(hex(x), hex(y)))
+
+        vx = self.registers[x]
+        vy = self.registers[y]
+
+        sum = vx + vy
+
+        self.registers[x] = (sum & 0xFFFF)
+
+        if (vx + vy) > 255:
+            self.registers[15] = 0x0001 # VF = 1
+        else:
+            self.registers[15] = 0x0000 # VF = 0
         self.pc += 2
 
 
