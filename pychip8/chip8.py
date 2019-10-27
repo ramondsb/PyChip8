@@ -53,6 +53,7 @@ class Chip8:
             g = {
                 0x0000: self.opcode_0x8XY0,
                 0x0001: self.opcode_0x8XY1,
+                0x0002: self.opcode_0x8XY2,
             }
             op = (opcode & int('0x000F', 16))
             g[op](opcode)
@@ -176,6 +177,7 @@ class Chip8:
         self.registers[x] = vy
         self.pc += 2
 
+
     def opcode_0x8XY1(self, opcode):
         print("Executing opcode 8XY1")
         """Sets VX to VX or VY"""
@@ -187,6 +189,20 @@ class Chip8:
         vx = self.registers[x]
         vy = self.registers[y]
         self.registers[x] = vx | vy
+        self.pc += 2
+
+
+    def opcode_0x8XY2(self, opcode):
+        print("Executing opcode 8XY2")
+        """Sets VX to VX and VY"""
+        x = (opcode & 0x0F00) >> 8
+        y = (opcode & 0x00F0) >> 4
+
+        print("x: {}, y: {}".format(hex(x), hex(y)))
+
+        vx = self.registers[x]
+        vy = self.registers[y]
+        self.registers[x] = vx & vy
         self.pc += 2
 
 
