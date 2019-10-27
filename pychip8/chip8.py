@@ -56,6 +56,7 @@ class Chip8:
                 0x4000: self.opcode_0x4XNN,
                 0x5000: self.opcode_0x5XY0,
                 0x6000: self.opcode_0x6XNN,
+                0x7000: self.opcode_0x7XNN,
                 0xa000: self.opcode_0xAXXX,
                 0x0000: opcode_0x00XX
         }
@@ -141,6 +142,16 @@ class Chip8:
         nn = opcode & 0x00FF
 
         self.registers[x] = nn
+        self.pc += 2
+
+
+    def opcode_0x7XNN(self, opcode):
+        print("Executing opcode 7XNN")
+        """Adds NN to VX"""
+        x = (opcode & 0x0F00) >> 8
+        nn = opcode & 0x00FF
+
+        self.registers[x] += nn
         self.pc += 2
 
 
