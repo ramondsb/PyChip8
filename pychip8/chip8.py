@@ -100,7 +100,10 @@ class Chip8:
 
         vx = self.registers[x]
         if vx == nn:
+            self.pc += 4
+        else:
             self.pc += 2
+
 
     def opcode_0x4XNN(self, opcode):
         print("Executing opcode 4XNN")
@@ -110,7 +113,10 @@ class Chip8:
 
         vx = self.registers[x]
         if vx != nn:
+            self.pc += 4
+        else:
             self.pc += 2
+
 
     def opcode_0x5XY0(self, opcode):
         print("Executing opcode 5XYN")
@@ -123,6 +129,8 @@ class Chip8:
         vx = self.registers[x]
         vy = self.registers[y]
         if vx == vy:
+            self.pc += 4
+        else:
             self.pc += 2
 
 
