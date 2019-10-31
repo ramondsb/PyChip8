@@ -58,6 +58,8 @@ class Chip8:
                 0x0004: self.opcode_0x8XY4,
                 0x0005: self.opcode_0x8XY5,
                 0x0006: self.opcode_0x8XY6,
+                0x0007: self.opcode_0x8XY7,
+                0x000E: self.opcode_0x8XYE,
             }
             op = (opcode & int('0x000F', 16))
             g[op](opcode)
@@ -281,6 +283,47 @@ class Chip8:
 
         # Set VF to the least significant bit
         self.registers[15] = least_significant_bit
+
+        self.pc += 2
+
+
+    def opcode_0x8XY7(self, opcode):
+        print("Executing opcode 8XY5")
+        """VY is subtracted from VX. VF is set to 0 when there's a borrow, and 1 when there isn't. """
+        x = (opcode & 0x0F00) >> 8
+        y = (opcode & 0x00F0) >> 4
+
+        print("x: {}, y: {}".format(hex(x), hex(y)))
+
+        vx = self.registers[x]
+        vy = self.registers[y]
+
+        sub = vy - vx
+
+        self.registers[x] = (sub & 0xFFFF)
+
+        if vy > vx:
+            self.registers[15] = 0x0001 # VF = 1
+        else:
+            self.registers[15] = 0x0000 # VF = 0
+        self.pc += 2
+
+
+    def opcode_0x8XYE(self, opcode):
+        print("Executing opcode 8XYE")
+        """Stores the most significant bit of VX in VF and then shifts VX to the left by 1 (Vx is multiplied by 2)"""
+        x = (opcode & 0x0F00) >> 8
+
+        vx = self.registers[x]
+
+        msb = 1 << (16 - 1)
+
+        most_significant_bit = vx & msb
+
+        self.registers[x] = vx << 1
+
+        # Set VF to the most significant bit
+        self.registers[15] = most_significant_bit
 
         self.pc += 2
 
