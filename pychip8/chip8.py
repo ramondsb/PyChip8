@@ -73,6 +73,7 @@ class Chip8:
                 0x6000: self.opcode_0x6XNN,
                 0x7000: self.opcode_0x7XNN,
                 0x8000: opcode_0x8NNN,
+                0x9000: self.opcode_0x9XY0,
                 0xa000: self.opcode_0xAXXX,
                 0x0000: opcode_0x00XX
         }
@@ -326,6 +327,23 @@ class Chip8:
         self.registers[15] = most_significant_bit
 
         self.pc += 2
+
+
+    def opcode_0x9XY0(self, opcode):
+        print("Executing opcode 9XY0")
+        """Skips the next instruction if VX doesn't equal VY"""
+        x = (opcode & 0x0F00) >> 8
+        y = (opcode & 0x00F0) >> 4
+
+        print("x: {}, y: {}".format(hex(x), hex(y)))
+
+        vx = self.registers[x]
+        vy = self.registers[y]
+
+        if vx != vy:
+            self.pc += 4
+        else:
+            self.pc += 2
 
 
     def sys_address2(self, opcode):
