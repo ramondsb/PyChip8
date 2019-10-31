@@ -57,6 +57,7 @@ class Chip8:
                 0x0003: self.opcode_0x8XY3,
                 0x0004: self.opcode_0x8XY4,
                 0x0005: self.opcode_0x8XY5,
+                0x0006: self.opcode_0x8XY6,
             }
             op = (opcode & int('0x000F', 16))
             g[op](opcode)
@@ -264,6 +265,23 @@ class Chip8:
             self.registers[15] = 0x0001 # VF = 1
         else:
             self.registers[15] = 0x0000 # VF = 0
+        self.pc += 2
+
+
+    def opcode_0x8XY6(self, opcode):
+        print("Executing opcode 8XY6")
+        """Stores the least significant bit of VX in VF and then shifts VX to the right by 1(Vx is divided by 2)"""
+        x = (opcode & 0x0F00) >> 8
+
+        vx = self.registers[x]
+
+        least_significant_bit = vx & 0x0001
+
+        self.registers[x] = vx >> 1
+
+        # Set VF to the least significant bit
+        self.registers[15] = least_significant_bit
+
         self.pc += 2
 
 
