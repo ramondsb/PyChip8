@@ -1,3 +1,6 @@
+import random
+
+
 class Chip8:
 
     def __init__(self):
@@ -76,6 +79,7 @@ class Chip8:
                 0x9000: self.opcode_0x9XY0,
                 0xa000: self.opcode_0xAXXX,
                 0xb000: self.opcode_0xBXXX,
+                0xc000: self.opcode_0xCXNN,
                 0x0000: opcode_0x00XX
         }
 
@@ -372,6 +376,18 @@ class Chip8:
         address = opcode & 0x0FFF
         v0 = self.registers[0]
         self.pc = address + v0
+
+
+    def opcode_0xCXNN(self, opcode):
+        print("Executing opcode CXNN")
+        """Sets VX to the result of a bitwise AND operation on a random number"""
+        x = (opcode & 0x0F00) >> 8
+        nn = opcode & 0x00FF
+        random_number = random.randrange(0, 256)
+
+        self.registers[x] = random_number & nn
+
+        self.pc += 2
 
 
     def opcode_00EE(self, opcode):
