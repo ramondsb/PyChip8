@@ -75,6 +75,7 @@ class Chip8:
                 0x8000: opcode_0x8NNN,
                 0x9000: self.opcode_0x9XY0,
                 0xa000: self.opcode_0xAXXX,
+                0xb000: self.opcode_0xBXXX,
                 0x0000: opcode_0x00XX
         }
 
@@ -363,6 +364,14 @@ class Chip8:
         address = opcode & 0x0FFF
         self.i = address 
         self.pc += 2
+
+
+    def opcode_0xBXXX(self, opcode):
+        print("Executing opcode BXXX")
+        """Jumps to the address XXX plus V0"""
+        address = opcode & 0x0FFF
+        v0 = self.registers[0]
+        self.pc = address + v0
 
 
     def opcode_00EE(self, opcode):
