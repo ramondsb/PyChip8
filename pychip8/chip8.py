@@ -94,6 +94,7 @@ class Chip8:
                 0xa000: self.opcode_0xAXXX,
                 0xb000: self.opcode_0xBXXX,
                 0xc000: self.opcode_0xCXNN,
+                0xd000: self.opcode_0xDXYN,
                 0x0000: opcode_0x00XX
         }
 
@@ -429,5 +430,45 @@ class Chip8:
         self.pc += 2
 
 
+    def opcode_0xDXYN(self, opcode):
+        print("Executing opcode DXYN")
+        """Display N-byte pattern from coordinate (VX,VY)"""
+
+        x = (opcode & 0x0F00) >> 8
+        y = (opcode & 0x00F0) >> 4
+        n = opcode & 0x000F
+
+        print("x: {}, y: {}, n: {}".format(x, y, n))
+
+        vx = self.registers[x]
+        vy = self.registers[y]
+
+        self.update_screen_state(vx, vy, n)
+
+        self.pc += 2
+
+
     def opcode_00EE(self, opcode):
         print("Executing opcode 00EE")
+
+
+    def update_screen_state(self, x, y, n):
+        # TODO: read n bytes starting at I from memory
+        print("TODO: update_screen_state")
+
+        sprites = []
+        for i in range(0, n):
+            sprites.append(self.memory[i])
+
+        # TODO: XOR bytes with screen
+        for h in range(0, n):
+            mem = self.memory[self.i + h]
+            for v in range(0, 8):
+                if (mem & (0x80 >> v)) != 0:
+                    address = v + x + (h + y) * 64
+                    old_pixel = self.display[address]
+                    new_pixel = old_pixel ^ 1
+                    self.display[address] = new_pixel
+                    if old_pixel == 1:
+                        self.registers[0xf] = 1
+
