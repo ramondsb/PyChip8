@@ -95,7 +95,8 @@ class Chip8:
                 0x0007: self.opcode_FX07,
                 0x000A: self.opcode_FX0A,
                 0x0015: self.opcode_FX15,
-                0x0018: self.opcode_FX18
+                0x0018: self.opcode_FX18,
+                0x001E: self.opcode_FX1E,
             }
             op = (opcode & int('0x00FF', 16))
             g[op](opcode)
@@ -567,6 +568,25 @@ class Chip8:
         vx = self.registers[x]
 
         self.sound_timer = vx
+
+        self.pc += 2
+
+
+    def opcode_FX1E(self, opcode):
+        print("Executing opcode FX18")
+        """Adds VX to I"""
+
+        x = (opcode & 0x0F00) >> 8
+        vx = self.registers[x]
+
+        sum = vx + self.i
+
+        self.i = (sum & 0xFFFF)
+
+        if sum > 255:
+            self.registers[15] = 0x0001 # VF = 1
+        else:
+            self.registers[15] = 0x0000 # VF = 0
 
         self.pc += 2
 
