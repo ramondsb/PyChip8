@@ -94,7 +94,8 @@ class Chip8:
             g = {
                 0x0007: self.opcode_FX07,
                 0x000A: self.opcode_FX0A,
-                0x0015: self.opcode_FX15
+                0x0015: self.opcode_FX15,
+                0x0018: self.opcode_FX18
             }
             op = (opcode & int('0x00FF', 16))
             g[op](opcode)
@@ -554,6 +555,18 @@ class Chip8:
         vx = self.registers[x]
 
         self.delay_timer = vx
+
+        self.pc += 2
+
+
+    def opcode_FX18(self, opcode):
+        print("Executing opcode FX18")
+        """Sets the sound timer to VX"""
+
+        x = (opcode & 0x0F00) >> 8
+        vx = self.registers[x]
+
+        self.sound_timer = vx
 
         self.pc += 2
 
