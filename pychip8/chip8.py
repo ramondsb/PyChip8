@@ -89,6 +89,13 @@ class Chip8:
             op = (opcode & int('0x00FF', 16))
             g2[op](opcode)
 
+        def opcode_0xFXXX(opcode):
+            g = {
+                0x0007: self.opcode_FX07
+            }
+            op = (opcode & int('0x00FF', 16))
+            g[op](opcode)
+
         g1 = {
                 0x1000: self.opcode_0x1NNN,
                 0x2000: self.opcode_0x2NNN,
@@ -104,6 +111,7 @@ class Chip8:
                 0xc000: self.opcode_0xCXNN,
                 0xd000: self.opcode_0xDXYN,
                 0xe000: opcode_0xEXXX,
+                0xf000: opcode_0xFXXX,
                 0x0000: opcode_0x00XX
         }
 
@@ -480,6 +488,16 @@ class Chip8:
             self.pc + 4
         else:
             self.pc += 2
+
+
+    def opcode_FX07(self, opcode):
+        print("Executing opcode FX07")
+        """Sets VX to the value of the delay timer"""
+        x = (opcode & 0x0F00) >> 8
+
+        self.registers[x] = self.delay_timer 
+
+        self.pc += 2
 
 
     def opcode_00EE(self, opcode):
