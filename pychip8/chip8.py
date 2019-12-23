@@ -93,7 +93,8 @@ class Chip8:
         def opcode_0xFXXX(opcode):
             g = {
                 0x0007: self.opcode_FX07,
-                0x000A: self.opcode_FX0A
+                0x000A: self.opcode_FX0A,
+                0x0015: self.opcode_FX15
             }
             op = (opcode & int('0x00FF', 16))
             g[op](opcode)
@@ -501,6 +502,7 @@ class Chip8:
 
         self.pc += 2
 
+
     def opcode_FX0A(self, opcode):
         print("Executing opcode FX0A")
         """Wait key press and then store in VX"""
@@ -540,6 +542,18 @@ class Chip8:
         x = (opcode & 0x0F00) >> 8
 
         self.registers[x] = wait_keypress()
+
+        self.pc += 2
+
+
+    def opcode_FX15(self, opcode):
+        print("Executing opcode FX15")
+        """Sets the delay timer to VX"""
+
+        x = (opcode & 0x0F00) >> 8
+        vx = self.registers[x]
+
+        self.delay_timer = vx
 
         self.pc += 2
 
