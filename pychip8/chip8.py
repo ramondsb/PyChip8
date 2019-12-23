@@ -12,7 +12,7 @@ class Chip8:
         self.registers = 16 * [int("0x00", 16)]
         self.delay_timer = int("0x00", 16)
         self.sound_timer = int("0x00", 16)
-        self.keypad = 16 * [int("0x00", 16)]
+        self.keypad = 16 * [False]
         self.display = (64 * 32) * [int("0x00", 16)]
 
 
@@ -81,6 +81,13 @@ class Chip8:
             op = (opcode & int('0x000F', 16))
             g[op](opcode)
 
+        def opcode_0xEXXX(opcode):
+            g2 = {
+                0x009E: self.opcode_EX9E
+            }
+            op = (opcode & int('0x00FF', 16))
+            g2[op](opcode)
+
         g1 = {
                 0x1000: self.opcode_0x1NNN,
                 0x2000: self.opcode_0x2NNN,
@@ -95,6 +102,7 @@ class Chip8:
                 0xb000: self.opcode_0xBXXX,
                 0xc000: self.opcode_0xCXNN,
                 0xd000: self.opcode_0xDXYN,
+                0xe000: opcode_0xEXXX,
                 0x0000: opcode_0x00XX
         }
 
@@ -446,6 +454,18 @@ class Chip8:
         self.update_screen_state(vx, vy, n)
 
         self.pc += 2
+
+
+    def opcode_EX9E(self, opcode):
+        print("Executing opcode EX9E")
+        x = (opcode & 0x0F00) >> 8
+        vx = self.registers[x]
+        print("x: {}, vx: {}".format(x, vx))
+
+        if self.keypad[vx] == True:
+            self.pc + 4
+        else:
+            self.pc += 2
 
 
     def opcode_00EE(self, opcode):
