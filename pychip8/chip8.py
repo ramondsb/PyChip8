@@ -16,6 +16,20 @@ class Chip8:
         self.display = (64 * 32) * [int("0x00", 16)]
 
 
+    def draw_display(self):
+        sout = ""
+        for y in range(0, 32):
+            sout += "\n"
+            for x in range(0, 64):
+                address = x + y * 64
+                if self.display[address] == 0:
+                    sout += "."
+                else:
+                    sout += "#"
+
+        print(sout)
+
+
     def cycle(self):
         opcode = self.fetch_opcode()
 

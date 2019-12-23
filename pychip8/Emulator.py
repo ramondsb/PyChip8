@@ -16,7 +16,9 @@ class Emulator:
     def run(self):
         self.chip8.initialize()
         self.chip8.load_rom(self.rom)
-        self.chip8.run()
+        for i in range(0, 1000):
+            self.chip8.run()
+            self.chip8.draw_display()
         # self.draw_screen(self.chip8.display)
         #while(self.chip8.is_running()):
           # chip8.display_state()
