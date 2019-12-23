@@ -83,7 +83,8 @@ class Chip8:
 
         def opcode_0xEXXX(opcode):
             g2 = {
-                0x009E: self.opcode_EX9E
+                0x009E: self.opcode_EX9E,
+                0x00A1: self.opcode_EXA1
             }
             op = (opcode & int('0x00FF', 16))
             g2[op](opcode)
@@ -463,6 +464,19 @@ class Chip8:
         print("x: {}, vx: {}".format(x, vx))
 
         if self.keypad[vx] == True:
+            self.pc + 4
+        else:
+            self.pc += 2
+
+
+    def opcode_EXA1(self, opcode):
+        print("Executing opcode EXA1")
+        """Skips the next instruction if the key stored in VX isn't pressed"""
+        x = (opcode & 0x0F00) >> 8
+        vx = self.registers[x]
+        print("x: {}, vx: {}".format(x, vx))
+
+        if self.keypad[vx] == False:
             self.pc + 4
         else:
             self.pc += 2
