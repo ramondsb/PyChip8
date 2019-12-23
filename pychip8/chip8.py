@@ -13,7 +13,7 @@ class Chip8:
         self.delay_timer = int("0x00", 16)
         self.sound_timer = int("0x00", 16)
         self.keypad = 16 * [int("0x00", 16)]
-        self.display = 64 * [32 * [int("0x00", 16)]]
+        self.display = (64 * 32) * [int("0x00", 16)]
 
 
     def cycle(self):
@@ -358,7 +358,7 @@ class Chip8:
     def opcode_00E0(self, opcode):
         """Clear screen"""
         print("clear screen")
-        self.display = 64 * [32 * [int("0x00", 16)]]
+        self.display = (64 * 32) * [int("0x00", 16)]
         self.pc += 2
         # TODO: Set draw flag
 
