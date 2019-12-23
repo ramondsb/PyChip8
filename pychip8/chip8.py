@@ -1,4 +1,5 @@
 import random
+import pygame
 
 
 class Chip8:
@@ -91,7 +92,8 @@ class Chip8:
 
         def opcode_0xFXXX(opcode):
             g = {
-                0x0007: self.opcode_FX07
+                0x0007: self.opcode_FX07,
+                0x000A: self.opcode_FX0A
             }
             op = (opcode & int('0x00FF', 16))
             g[op](opcode)
@@ -496,6 +498,48 @@ class Chip8:
         x = (opcode & 0x0F00) >> 8
 
         self.registers[x] = self.delay_timer 
+
+        self.pc += 2
+
+    def opcode_FX0A(self, opcode):
+        print("Executing opcode FX0A")
+        """Wait key press and then store in VX"""
+
+        def wait_keypress():
+            key_pressed = None
+            while True:
+                event = pygame.event.wait()
+                if event.type == pygame.KEYDOWN:
+                    keys = {
+                        pygame.K_0: 0,
+                        pygame.K_1: 1,
+                        pygame.K_2: 2,
+                        pygame.K_3: 3,
+                        pygame.K_4: 4,
+                        pygame.K_5: 5,
+                        pygame.K_6: 6,
+                        pygame.K_7: 7,
+                        pygame.K_8: 8,
+                        pygame.K_9: 9,
+                        pygame.K_a: 10,
+                        pygame.K_b: 11,
+                        pygame.K_c: 12,
+                        pygame.K_d: 13,
+                        pygame.K_e: 14,
+                        pygame.K_f: 15
+                    }
+
+                    if event.key in keys.keys():
+                        key_pressed = keys[event.key]
+                        break
+                    else:
+                        continue
+
+            return key_pressed
+
+        x = (opcode & 0x0F00) >> 8
+
+        self.registers[x] = wait_keypress()
 
         self.pc += 2
 
