@@ -14,6 +14,7 @@ class Emulator:
 
 
     def run(self):
+        self.chip8.initialize()
         self.chip8.load_rom(self.rom)
         self.chip8.run()
         # self.draw_screen(self.chip8.display)
