@@ -97,6 +97,7 @@ class Chip8:
                 0x0015: self.opcode_FX15,
                 0x0018: self.opcode_FX18,
                 0x001E: self.opcode_FX1E,
+                0x0029: self.opcode_FX29,
             }
             op = (opcode & int('0x00FF', 16))
             g[op](opcode)
@@ -587,6 +588,18 @@ class Chip8:
             self.registers[15] = 0x0001 # VF = 1
         else:
             self.registers[15] = 0x0000 # VF = 0
+
+        self.pc += 2
+
+
+    def opcode_FX29(self, opcode):
+        print("Executing opcode FX29")
+        """Sets I to the location of the sprite for the character in VX"""
+
+        x = (opcode & 0x0F00) >> 8
+        vx = self.registers[x]
+
+        self.i = self.memory[vx]
 
         self.pc += 2
 
