@@ -666,7 +666,9 @@ class Chip8:
             mem = self.memory[self.i + h]
             for v in range(0, 8):
                 if (mem & (0x80 >> v)) != 0:
+                    # TODO: Use size definitions
                     address = v + x + (h + y) * 64
+                    if address > 64 * 32: continue
                     old_pixel = self.display[address]
                     new_pixel = old_pixel ^ 1
                     self.display[address] = new_pixel
