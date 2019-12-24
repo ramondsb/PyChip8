@@ -99,6 +99,7 @@ class Chip8:
                 0x001E: self.opcode_FX1E,
                 0x0029: self.opcode_FX29,
                 0x0033: self.opcode_FX33,
+                0x0055: self.opcode_FX55,
             }
             op = (opcode & int('0x00FF', 16))
             g[op](opcode)
@@ -619,6 +620,18 @@ class Chip8:
         self.memory[self.i] = c
         self.memory[self.i + 1] = d
         self.memory[self.i + 2] = u
+
+        self.pc += 2
+
+
+    def opcode_FX55(self, opcode):
+        print("Executing opcode FX55")
+        """Stores V0 to VX in memory starting at address I"""
+
+        x = (opcode & 0x0F00) >> 8
+
+        for offset in range(0, x + 1):
+            self.memory[self.i + offset] = self.registers[offset]
 
         self.pc += 2
 
