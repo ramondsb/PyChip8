@@ -651,6 +651,10 @@ class Chip8:
 
     def opcode_00EE(self, opcode):
         print("Executing opcode 00EE")
+        """Return from a subroutine"""
+
+        self.pc = self.stack[self.sp - 1]
+        self.sp -= 1
 
 
     def update_screen_state(self, x, y, n):
