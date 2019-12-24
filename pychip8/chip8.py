@@ -98,6 +98,7 @@ class Chip8:
                 0x0018: self.opcode_FX18,
                 0x001E: self.opcode_FX1E,
                 0x0029: self.opcode_FX29,
+                0x0033: self.opcode_FX33,
             }
             op = (opcode & int('0x00FF', 16))
             g[op](opcode)
@@ -600,6 +601,24 @@ class Chip8:
         vx = self.registers[x]
 
         self.i = self.memory[vx]
+
+        self.pc += 2
+
+
+    def opcode_FX33(self, opcode):
+        print("Executing opcode FX33")
+        """Stores the binary-coded decimal representation of VX"""
+
+        x = (opcode & 0x0F00) >> 8
+        vx = self.registers[x]
+
+        c = int(vx / 100)
+        d = int(vx % 100 / 10)
+        u = int(vx % 10)
+
+        self.memory[self.i] = c
+        self.memory[self.i + 1] = d
+        self.memory[self.i + 2] = u
 
         self.pc += 2
 
