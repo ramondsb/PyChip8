@@ -28,7 +28,10 @@ Another Chip8 emulator implementation in Python
 ``Sorry, not implemented yet!``
 
 ## How to test
-``Sorry, not implemented yet!``
+### Unit Tests
+```shell
+python -m unittest discover
+```
 
 ## Resources
 
