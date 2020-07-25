@@ -4,6 +4,8 @@
 
 Another Chip8 emulator implementation in Python
 
+![Interpreting the MAZE ROM](./running_maze.gif)
+
 ## Table of Contents
 
 * [Why have I created this?](#why-have-i-created-this-?)
