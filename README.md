@@ -22,12 +22,23 @@ Another Chip8 emulator implementation in Python
 - ~~To pollute Github with another crap repository~~
 
 ## Dependencies
+
 - _Python >= 3.6_
+- _Pygame == 1.9_
 
 ## How to run
-``Sorry, not implemented yet!``
+
+### Get access to some ROMs
+
+There are public domain ROMs [here](https://www.zophar.net/pdroms/chip8.html).
+
+### Run program
+```shell
+python pychip8/Emulator "ROM file"
+```
 
 ## How to test
+
 ### Unit Tests
 ```shell
 python -m unittest discover
@@ -36,6 +47,7 @@ python -m unittest discover
 ## Resources
 
 * [Tutorial by Multigesture](http://www.multigesture.net/articles/how-to-write-an-emulator-chip-8-interpreter/)
+* [ROMs by Zophar](https://www.zophar.net/pdroms/chip8.html)
 
 ## LICENSE
 
