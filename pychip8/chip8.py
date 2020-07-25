@@ -32,7 +32,8 @@ class Chip8:
 
 
     def cycle(self):
-        opcode = self.fetch_opcode()
+        state = self.get_state()
+        opcode = self.fetch_opcode(state)
 
         self.decode_opcode(opcode)
 
@@ -46,11 +47,20 @@ class Chip8:
             print("beep")
 
 
-    def fetch_opcode(self):
-        msb = self.memory[self.pc]
-        lsb = self.memory[self.pc + 1]
+    def get_state(self):
+        """Returns a dict with the current state data"""
+        return {
+            "memory": self.memory,
+            "pc": self.pc
+        }
 
-        #print("msb: {}, lsb: {}".format(msb, lsb))
+
+    def fetch_opcode(self, state):
+        memory = state["memory"]
+        pc = state["pc"]
+
+        msb = memory[pc]
+        lsb = memory[pc + 1]
 
         return ((msb << 8) | (lsb))
 
